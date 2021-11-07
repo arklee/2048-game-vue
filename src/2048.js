@@ -1,7 +1,7 @@
 export function cre_num() {
   const ran = Math.random();
-  if (ran < 0.9) return 2;
-  else return 4;
+  if (ran < 0.9) return 1;
+  else return 2;
 }
 
 export function initArray(size) {
@@ -45,9 +45,9 @@ export function down(array, score, size) {
           array[i][m] = 0
         }
         else if (array[i][m] === array[j][m]) {
-          array[j][m] = array[i][m] + array[j][m]
+          array[j][m] = array[i][m] + 1
           array[i][m] = 0
-          score = score + array[j][m]
+          score = score + 2 ** array[j][m]
           break
         }
         else break
@@ -64,9 +64,9 @@ export function up(array, score, size) {
           array[j][m] = 0
         }
         else if (array[i][m] === array[j][m]) {
-          array[i][m] = array[i][m] + array[j][m]
+          array[i][m] = array[i][m] + 1
           array[j][m] = 0
-          score = score + array[i][m]
+          score = score + 2 ** array[i][m]
           break
         }
         else break
@@ -83,9 +83,9 @@ export function left(array, score, size) {
           array[m][j] = 0
         }
         else if (array[m][i] === array[m][j]) {
-          array[m][i] = array[m][i] + array[m][j]
+          array[m][i] = array[m][i] + 1
           array[m][j] = 0
-          score = score + array[m][i]
+          score = score + 2 ** array[m][i]
           break
         }
         else break
@@ -102,9 +102,9 @@ export function right(array, score, size) {
           array[m][i] = 0
         }
         else if (array[m][i] === array[m][j]) {
-          array[m][j] = array[m][i] + array[m][j]
+          array[m][j] = array[m][i] + 1
           array[m][i] = 0
-          score = score + array[m][j]
+          score = score + 2 ** array[m][j]
           break
         }
         else break

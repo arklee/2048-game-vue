@@ -30,7 +30,7 @@ export default {
         [0, 0, 0, 0],
       ],
       score: 0,
-      highest: localStorage.getItem('score') ? localStorage.getItem('score') : 0,
+      highest: localStorage.getItem('a4') ? localStorage.getItem('a4') : 0,
       isRunning: false,
     };
   },
@@ -67,9 +67,6 @@ export default {
         else if (e.key === "ArrowDown") f(down);
         else if (e.key === "ArrowLeft") f(left);
         else if (e.key === "ArrowRight") f(right);
-        if (this.score === 2048) {
-          alert('You Win!')
-        }
       }
     },
   },
