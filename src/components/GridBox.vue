@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="container" :style="{'grid-template-columns': `repeat(${size}, ${100/size}%)`, 'grid-template-rows': `repeat(${size}, ${100/size}%)`, 'font-size': `${108/size}px`}">
+    <div v-if="status === 'running'" class="container" :style="{'grid-template-columns': `repeat(${size}, ${100/size}%)`, 'grid-template-rows': `repeat(${size}, ${100/size}%)`, 'font-size': `${108/size}px`}">
       <template v-for="(row, rowIndex) in array">
         <div
             class="box"
@@ -11,6 +11,12 @@
           {{ show(showString, x) }}
         </div>
       </template>
+    </div>
+    <div v-else-if="status === 'ready'" class="textBox" :style="{'font-size':'80px'}">Press the START button</div>
+    <div v-else-if="status === 'over'" class="textBox">
+      <span :style="{'font-size':'60px', 'color':'#cdc1b4'}">GAME OVER</span><br/><br/>
+      <span :style="{'font-size':'40px', 'color':'#edc850'}">Your score is {{score}}</span><br/><br/>
+      <span :style="{'font-size':'30px', 'color':'#f9f6f2', 'width':'320px'}">Press the RESTART button to start a new game!</span>
     </div>
     <div class="themes">
       <label><input type="radio" name="theme" value="defaultShow" v-model="showString"/>Default</label>
@@ -24,7 +30,7 @@
 <script>
 export default {
   name: "GridBox",
-  props: ["array", "size"],
+  props: ["array", "size", "status", 'score'],
   data(){
     return {
       showString: 'defaultShow'
@@ -77,7 +83,6 @@ export default {
       else if (x === 12) return "大乘"
       else if (x === 13) return "散仙"
       else if (x === 14) return "金仙"
-      else if (x === 15) return "大罗金仙"
       else return '我不会了'
     }
   }
@@ -93,6 +98,19 @@ export default {
   padding: 5px;
   border-radius: 3%;
   margin: 0 auto;
+}
+
+.textBox {
+  width: 400px;
+  height: 400px;
+  display: flex;
+  align-items: center;
+  background-color: #776e65;
+  padding: 5px;
+  border-radius: 3%;
+  margin: 0 auto;
+  flex-direction: column;
+  font-weight: bold;
 }
 
 .themes {

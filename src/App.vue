@@ -2,11 +2,11 @@
   <div id="app" @keydown="move">
     <h1 class="title">2048 Puzzle Game</h1>
     <h2 class="title">Current Score: {{ score }} | Highest Score: {{ highest }}</h2>
-    <GridBox :array="this.array" :size="size"/>
+    <GridBox :array="array" :size="size" :status="status" :score="score"/>
     <span style="display: flex; justify-content: center">
       <span class="difficultyText">Difficulty</span>
       <input value="4" class="input" type="number" ref="input" min="3" max="7"/>
-      <button ref="btn" @focusout="refocus" class="btn" @click="start">{{isRunning ? 'RESTART' : 'START'}}</button>
+      <button ref="btn" @focusout="refocus" class="btn" @click="start">{{status === 'running' ? 'RESTART' : 'START'}}</button>
     </span>
   </div>
 </template>
@@ -31,14 +31,21 @@ export default {
       ],
       score: 0,
       highest: localStorage.getItem('a4') ? localStorage.getItem('a4') : 0,
-      isRunning: false,
+      status: 'ready',
     };
   },
   methods: {
     start() {
-      this.isRunning = true
+      this.status = 'running'
       this.score = 0
-      this.size = parseInt(this.$refs.input.value)
+      let x = parseInt(this.$refs.input.value)
+      if (x > 7) {
+        this.size = 7
+      } else if (x < 3) {
+        this.size = 3
+      } else {
+        this.size = x
+      }
       this.array = initArray(this.size)
       this.highest = localStorage.getItem('a' + this.size) ? localStorage.getItem('a' + this.size) : 0
     },
@@ -48,25 +55,26 @@ export default {
       })
     },
     move(e) {
-      if (checkFail(this.array, this.size)) {
-        this.isRunning = false;
-        alert("Game Over");
-      } else {
-        let f = (x) => {
-          let result = mov(this.array, this.score, x, this.size);
-          if (result[2]) {
-            this.array = result[0];
-            this.score = result[1];
-            if (this.score > this.highest) {
-              this.highest = this.score
-              localStorage.setItem('a' + this.size, this.highest)
+      if (this.status !== 'over') {
+        if (checkFail(this.array, this.size)) {
+          this.status = 'over';
+        } else {
+          let f = (x) => {
+            let result = mov(this.array, this.score, x, this.size);
+            if (result[2]) {
+              this.array = result[0];
+              this.score = result[1];
+              if (this.score > this.highest) {
+                this.highest = this.score
+                localStorage.setItem('a' + this.size, this.highest)
+              }
             }
-          }
-        };
-        if (e.key === "ArrowUp") f(up);
-        else if (e.key === "ArrowDown") f(down);
-        else if (e.key === "ArrowLeft") f(left);
-        else if (e.key === "ArrowRight") f(right);
+          };
+          if (e.key === "ArrowUp") f(up);
+          else if (e.key === "ArrowDown") f(down);
+          else if (e.key === "ArrowLeft") f(left);
+          else if (e.key === "ArrowRight") f(right);
+        }
       }
     },
   },
