@@ -41,7 +41,7 @@ export function down(array, score, size) {
     for (let j = size - 1; j >= 1; j--)
       for (let i = j - 1; i >= 0; i--) {
         if (array[i][m] === 0 || array[j][m] === 0) {
-          array[j][m] = array[i][m] + array[j][m]
+          array[j][m] = Math.max(array[i][m], array[j][m])
           array[i][m] = 0
         }
         else if (array[i][m] === array[j][m]) {
@@ -60,7 +60,7 @@ export function up(array, score, size) {
     for (let i = 0; i < size - 1; i++)
       for (let j = i + 1; j < size; j++) {
         if (array[i][m] === 0 || array[j][m] === 0) {
-          array[i][m] = array[i][m] + array[j][m]
+          array[i][m] = Math.max(array[i][m], array[j][m])
           array[j][m] = 0
         }
         else if (array[i][m] === array[j][m]) {
@@ -79,7 +79,7 @@ export function left(array, score, size) {
     for (let i = 0; i < size; i++)
       for (let j = i + 1; j < size; j++) {
         if (array[m][i] === 0 || array[m][j] === 0) {
-          array[m][i] = array[m][i] + array[m][j]
+          array[m][i] = Math.max(array[m][i], array[m][j])
           array[m][j] = 0
         }
         else if (array[m][i] === array[m][j]) {
@@ -98,7 +98,7 @@ export function right(array, score, size) {
     for (let j = size - 1; j >= 0; j--)
       for (let i = j - 1; i >= 0; i--) {
         if (array[m][i] === 0 || array[m][j] === 0) {
-          array[m][j] = array[m][i] + array[m][j]
+          array[m][j] = Math.max(array[m][i], array[m][j])
           array[m][i] = 0
         }
         else if (array[m][i] === array[m][j]) {
@@ -135,4 +135,18 @@ export function checkFail(array, size) {
     }
   }
   return true
+}
+
+export function checkWin(array, size, won) {
+  let win = false
+  if (won === false) {
+    for (let m = 0; m < size; m++) {
+      for (let n = 0; n < size; n++) {
+        if (array[m][n] === 3) {
+          win = true
+        }
+      }
+    }
+  }
+  return win
 }

@@ -1,23 +1,27 @@
 <template>
   <div id="app" @keydown="move">
     <h1 class="title">2048 Puzzle Game</h1>
-    <h2 class="title">Current Score: {{ score }} | Highest Score: {{ highest }}</h2>
+    <h2 v-if="status === 'running' || status === 'won'" class="title">Current Score: {{ score }} | Highest Score: {{ highest }}</h2>
+    <h2 v-else class="title">Highest Score: {{ highest }}</h2>
+    <winToast v-if="showWin"/>
     <GridBox :array="array" :size="size" :status="status" :score="score"/>
     <span style="display: flex; justify-content: center">
       <span class="difficultyText">Difficulty</span>
       <input value="4" class="input" type="number" ref="input" min="3" max="7"/>
-      <button ref="btn" @focusout="refocus" class="btn" @click="start">{{status === 'running' ? 'RESTART' : 'START'}}</button>
+      <button ref="btn" @focusout="refocus" class="btn" @click="start">{{status === 'running' || status === 'won'? 'RESTART' : 'START'}}</button>
     </span>
   </div>
 </template>
 
 <script>
+import WinToast from "@/components/winToast";
 import GridBox from "./components/GridBox.vue";
-import {initArray, mov, up, down, right, left, checkFail} from "./2048.js";
+import {initArray, mov, up, down, right, left, checkFail, checkWin} from "./2048.js";
 
 export default {
   name: "App",
   components: {
+    WinToast,
     GridBox,
   },
   data() {
@@ -32,6 +36,7 @@ export default {
       score: 0,
       highest: localStorage.getItem('a4') ? localStorage.getItem('a4') : 0,
       status: 'ready',
+      showWin: false
     };
   },
   methods: {
@@ -39,11 +44,10 @@ export default {
       this.status = 'running'
       this.score = 0
       let x = parseInt(this.$refs.input.value)
-      if (x > 7) {
-        this.size = 7
-      } else if (x < 3) {
-        this.size = 3
-      } else {
+      if (x > 7 || x < 3) {
+        alert("Please select a number from 3 to 7")
+      }
+      else {
         this.size = x
       }
       this.array = initArray(this.size)
@@ -55,25 +59,31 @@ export default {
       })
     },
     move(e) {
-      if (this.status !== 'over') {
+      if (this.status === 'running' || this.status === 'won') {
+        let f = (x) => {
+          let result = mov(this.array, this.score, x, this.size);
+          if (result[2]) {
+            this.array = result[0];
+            this.score = result[1];
+            if (this.score > this.highest) {
+              this.highest = this.score
+              localStorage.setItem('a' + this.size, this.highest)
+            }
+          }
+        };
+        if (e.key === "ArrowUp") f(up);
+        else if (e.key === "ArrowDown") f(down);
+        else if (e.key === "ArrowLeft") f(left);
+        else if (e.key === "ArrowRight") f(right);
+        if(checkWin(this.array, this.size, this.status === 'won')) {
+          this.status = 'won'
+          this.showWin = true
+          setInterval(() => {
+            this.showWin = false
+          },3000)
+        }
         if (checkFail(this.array, this.size)) {
           this.status = 'over';
-        } else {
-          let f = (x) => {
-            let result = mov(this.array, this.score, x, this.size);
-            if (result[2]) {
-              this.array = result[0];
-              this.score = result[1];
-              if (this.score > this.highest) {
-                this.highest = this.score
-                localStorage.setItem('a' + this.size, this.highest)
-              }
-            }
-          };
-          if (e.key === "ArrowUp") f(up);
-          else if (e.key === "ArrowDown") f(down);
-          else if (e.key === "ArrowLeft") f(left);
-          else if (e.key === "ArrowRight") f(right);
         }
       }
     },
