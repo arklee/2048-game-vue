@@ -116,7 +116,7 @@ export default {
             this.score = result[1];
             if (this.score > this.highest) {
               this.highest = this.score
-              axios.get(`/setScore?size=${this.size}&score=${this.highest}`)
+              axios.post(`/setScore?size=${this.size}&score=${this.highest}`)
             }
           }
         };
