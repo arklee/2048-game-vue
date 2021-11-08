@@ -1,8 +1,8 @@
 <template>
   <div id="app" @keydown="move">
-    <h1 class="title">2048 Puzzle Game</h1>
-    <h2 v-if="status === 'running' || status === 'won'" class="title">Current Score: {{ score }} | Highest Score: {{ highest }}</h2>
-    <h2 v-else class="title">Highest Score: {{ highest }}</h2>
+    <h1>2048 Puzzle Game</h1>
+    <h2 v-if="status === 'running' || status === 'won'">Current Score: {{ score }} | Highest Score: {{ highest }}</h2>
+    <h2 v-else>Highest Score: {{ highest }}</h2>
     <winToast :showWin="showWin"/>
     <GridBox :array="array" :size="size" :status="status" :score="score"/>
     <span style="display: flex; justify-content: center">
@@ -59,6 +59,7 @@ export default {
       })
     },
     move(e) {
+
       if (this.status === 'running' || this.status === 'won') {
         let f = (x) => {
           let result = mov(this.array, this.score, x, this.size);
@@ -100,42 +101,52 @@ export default {
   "Lucida Sans Unicode", Geneva, Verdana, sans-serif;
 }
 
-.title {
+h1 {
   color: #776e65;
+  font-size: 5vh;
+  margin-top: 0;
+  margin-bottom: 0;
+}
+
+h2 {
+  color: #776e65;
+  font-size: 4vh;
+  margin-top: 2vh;
+  margin-bottom: 2vh;
 }
 
 .difficultyText {
-  padding-top: 10px;
-  width: 150px;
-  height: 40px;
+  padding-top: 1vh;
+  width: 22vh;
+  height: 7.2vh;
   background-color: #eee4da;
   text-align: center;
-  font-size: 24px;
+  font-size: 4vh;
   border-width: 0;
   color: #776e65;
-  border-radius: 8px 0 0 8px;
+  border-radius: 2vh 0 0 2vh;
 }
 
 .input {
-  width: 40px;
-  height: 40px;
+  width: 6vh;
+  height: 6vh;
   background-color: #ffffff;
   text-align: center;
-  font-size: 24px;
-  border-radius: 0 8px 8px 0;
-  border-width: 4px;
+  font-size: 4vh;
+  border-radius: 0 2vh 2vh 0;
+  border-width: 1vh;
   border-color: #eee4da;
   color: #776e65;
-  margin-right: 50px;
+  margin-right: 8vh;
 }
 
 .btn {
-  width: 140px;
-  height: 50px;
+  width: 25vh;
+  height: 8vh;
   background-color: #776e65;
   text-align: center;
-  font-size: 24px;
-  border-radius: 8px;
+  font-size: 4vh;
+  border-radius: 2vh;
   border-width: 0;
   color: #eee4da;
 }

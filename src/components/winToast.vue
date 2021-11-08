@@ -27,9 +27,9 @@ export default {
   background-color: rgba(0, 0, 0, 0.3);
 }
 .text {
-  margin-top: 300px;
+  margin-top: 30vh;
   color: #edc22e;
-  font-size: 120px;
+  font-size: 20vh;
 }
 
 .fade-enter-active, .fade-leave-active {

@@ -1,7 +1,7 @@
 <template>
   <div>
     <Toast :status="status" :score="score"/>
-    <div class="container" :style="{'grid-template-columns': `repeat(${size}, ${100/size}%)`, 'grid-template-rows': `repeat(${size}, ${100/size}%)`, 'font-size': `${108/size}px`}">
+    <div class="container" :style="{'grid-template-columns': `repeat(${size}, ${100/size}%)`, 'grid-template-rows': `repeat(${size}, ${100/size}%)`, 'font-size': `${18/size}vh`}">
       <template v-for="(row, rowIndex) in array">
         <div
             class="box"
@@ -88,42 +88,33 @@ export default {
 
 <style scoped>
 .container {
-  width: 400px;
-  height: 400px;
+  width: 60vh;
+  height: 60vh;
   display: grid;
   background-color: #bbada0;
-  padding: 5px;
+  padding: 1vh;
   border-radius: 3%;
   margin: 0 auto;
-}
-
-.textBox {
-  color:#cdc1b4;
-  width: 400px;
-  height: 400px;
-  display: flex;
-  align-items: center;
-  background-color: #776e65;
-  padding: 10px 5px 0 5px;
-  border-radius: 3%;
-  margin: 0 auto;
-  flex-direction: column;
-  font-weight: bold;
 }
 
 .themes {
-  margin-top: 20px;
-  margin-bottom: 20px;
+  margin-top: 1vh;
+  margin-bottom: 1vh;
 }
 
 label{
-  margin: 15px;
+  margin: 1.5vh;
   color: #776e65;
+  font-size: 3vh;
+}
+label input {
+  width: 2vh;
+  height: 2vh;
 }
 
 .box {
   background-color: #cdc1b4;
-  margin: 5px;
+  margin: 0.8vh;
   border-radius: 12%;
   display: flex;
   justify-content: center;

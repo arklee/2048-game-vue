@@ -1,6 +1,8 @@
 <template>
   <transition name="fade">
-    <div v-if="status === 'ready' || status === 'over'" class="toast" :class="textStyle">{{showText}}</div>
+    <div v-if="status === 'ready' || status === 'over'" class="toast" :class="textStyle">
+      {{showText}}
+    </div>
   </transition>
 </template>
 
@@ -33,25 +35,25 @@ export default {
 }
 
 .toast {
-  padding: 50px 5px 0 5px;
-  width: 400px;
-  height: 360px;
+  padding: 1vh;
+  width: 60vh;
+  height: 60vh;
   border-radius: 3%;
   position: absolute;
   left: 50%;
-  margin-left: -205px;
+  margin-left: -31vh;
   font-weight: bold;
 }
 
 .readyToast {
   background-color: rgba(89, 86, 86, 0.5);
   color: #d9d6cf;
-  font-size: 70px;
+  font-size: 11vh;
 }
 
 .overToast {
   background-color: rgba(89, 86, 86, 0.85);
   color: #d9d6cf;
-  font-size: 60px;
+  font-size: 9vh;
 }
 </style>
