@@ -127,7 +127,7 @@ export default {
         if(checkWin(this.array, this.size, this.status === 'won')) {
           this.status = 'won'
           this.showWin = true
-          setInterval(() => {
+          setTimeout(() => {
             this.showWin = false
           },3000)
         }
