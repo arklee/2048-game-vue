@@ -142,7 +142,7 @@ export function checkWin(array, size, won) {
   if (won === false) {
     for (let m = 0; m < size; m++) {
       for (let n = 0; n < size; n++) {
-        if (array[m][n] === 3) {
+        if (array[m][n] === 11) {
           win = true
         }
       }

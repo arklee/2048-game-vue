@@ -3,7 +3,7 @@
     <h1 class="title">2048 Puzzle Game</h1>
     <h2 v-if="status === 'running' || status === 'won'" class="title">Current Score: {{ score }} | Highest Score: {{ highest }}</h2>
     <h2 v-else class="title">Highest Score: {{ highest }}</h2>
-    <winToast v-if="showWin"/>
+    <winToast :showWin="showWin"/>
     <GridBox :array="array" :size="size" :status="status" :score="score"/>
     <span style="display: flex; justify-content: center">
       <span class="difficultyText">Difficulty</span>

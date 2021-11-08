@@ -1,5 +1,7 @@
 <template>
-  <div v-if="status === 'ready' || status === 'over'" class="toast" :class="textStyle">{{showText}}</div>
+  <transition name="fade">
+    <div v-if="status === 'ready' || status === 'over'" class="toast" :class="textStyle">{{showText}}</div>
+  </transition>
 </template>
 
 <script>
@@ -22,6 +24,14 @@ export default {
 </script>
 
 <style scoped>
+
+.fade-enter-active, .fade-leave-active {
+  transition: opacity .5s;
+}
+.fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */ {
+  opacity: 0;
+}
+
 .toast {
   padding: 50px 5px 0 5px;
   width: 400px;

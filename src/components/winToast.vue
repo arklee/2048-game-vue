@@ -1,12 +1,15 @@
 <template>
-  <div class="toast">
-    <div class="text">You Win!</div>
-  </div>
+  <transition name="fade">
+    <div v-if="showWin" class="toast">
+      <div class="text">You Win!</div>
+    </div>
+  </transition>
 </template>
 
 <script>
 export default {
   name: "winToast",
+  props: ['showWin'],
   data() {
     return {
       show: true
@@ -27,5 +30,12 @@ export default {
   margin-top: 300px;
   color: #edc22e;
   font-size: 120px;
+}
+
+.fade-enter-active, .fade-leave-active {
+  transition: opacity .5s;
+}
+.fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */ {
+  opacity: 0;
 }
 </style>
