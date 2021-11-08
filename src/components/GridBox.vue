@@ -88,24 +88,24 @@ export default {
 
 <style scoped>
 .container {
-  width: 60vh;
-  height: 60vh;
+  width: 50vh;
+  height: 50vh;
   display: grid;
   background-color: #bbada0;
-  padding: 1vh;
+  padding: 0.8vh;
   border-radius: 3%;
   margin: 0 auto;
 }
 
 .themes {
   margin-top: 1vh;
-  margin-bottom: 1vh;
+  margin-bottom: 2vh;
 }
 
 label{
-  margin: 1.5vh;
+  margin: 1.2vw;
   color: #776e65;
-  font-size: 3vh;
+  font-size: 2.5vh;
 }
 label input {
   width: 2vh;
@@ -114,7 +114,7 @@ label input {
 
 .box {
   background-color: #cdc1b4;
-  margin: 0.8vh;
+  margin: 0.66vh;
   border-radius: 12%;
   display: flex;
   justify-content: center;

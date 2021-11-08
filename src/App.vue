@@ -1,5 +1,5 @@
 <template>
-  <div id="app" @keydown="move">
+  <div id="app" @touchstart="touchstart" @touchend="touchend" @keydown="keydown">
     <h1>2048 Puzzle Game</h1>
     <h2 v-if="status === 'running' || status === 'won'">Current Score: {{ score }} | Highest Score: {{ highest }}</h2>
     <h2 v-else>Highest Score: {{ highest }}</h2>
@@ -26,6 +26,10 @@ export default {
   },
   data() {
     return {
+      startX: 0,
+      startY: 0,
+      moveX: 0,
+      moveY: 0,
       size: 4,
       array: [
         [0, 0, 0, 0],
@@ -40,6 +44,33 @@ export default {
     };
   },
   methods: {
+    touchstart(e) {
+      this.startX = e.touches[0].clientX
+      this.startY = e.touches[0].clientY
+    },
+    touchend(e) {
+      this.moveX = e.changedTouches[0].clientX
+      this.moveY = e.changedTouches[0].clientY
+      let horizon = this.startX - this.moveX
+      let vertical = this.startY - this.moveY
+      let x = 0
+      if (Math.abs(horizon) > Math.abs(vertical)) { //上下
+        if (horizon > 100) {
+          x = 3
+        }
+        else if (horizon < -100) {
+          x = 4
+        }
+      } else {
+        if (vertical > 100) {
+          x = 1
+        }
+        else if (vertical < -100) {
+          x = 2
+        }
+      }
+      this.move(x)
+    },
     start() {
       this.status = 'running'
       this.score = 0
@@ -58,8 +89,15 @@ export default {
         this.$refs.btn.focus()
       })
     },
-    move(e) {
-
+    keydown(e) {
+      let x = 0
+      if (e.key === "ArrowUp") x = 1
+      else if (e.key === "ArrowDown") x = 2
+      else if (e.key === "ArrowLeft") x = 3
+      else if (e.key === "ArrowRight") x = 4
+      this.move(x)
+    },
+    move(a) {
       if (this.status === 'running' || this.status === 'won') {
         let f = (x) => {
           let result = mov(this.array, this.score, x, this.size);
@@ -72,10 +110,10 @@ export default {
             }
           }
         };
-        if (e.key === "ArrowUp") f(up);
-        else if (e.key === "ArrowDown") f(down);
-        else if (e.key === "ArrowLeft") f(left);
-        else if (e.key === "ArrowRight") f(right);
+        if (a === 1) f(up);
+        else if (a === 2) f(down);
+        else if (a === 3) f(left);
+        else if (a === 4) f(right);
         if(checkWin(this.array, this.size, this.status === 'won')) {
           this.status = 'won'
           this.showWin = true
@@ -104,24 +142,22 @@ export default {
 h1 {
   color: #776e65;
   font-size: 5vh;
-  margin-top: 0;
-  margin-bottom: 0;
 }
 
 h2 {
   color: #776e65;
-  font-size: 4vh;
-  margin-top: 2vh;
-  margin-bottom: 2vh;
+  font-size: 2.3vh;
+  margin-top: 0;
 }
 
 .difficultyText {
-  padding-top: 1vh;
-  width: 22vh;
-  height: 7.2vh;
+  display: flex;
+  justify-content: center;
+  width: 18vh;
+  height: 6.5vh;
   background-color: #eee4da;
   text-align: center;
-  font-size: 4vh;
+  font-size: 3vh;
   border-width: 0;
   color: #776e65;
   border-radius: 2vh 0 0 2vh;
@@ -129,10 +165,10 @@ h2 {
 
 .input {
   width: 6vh;
-  height: 6vh;
+  height: 4vh;
   background-color: #ffffff;
   text-align: center;
-  font-size: 4vh;
+  font-size: 3vh;
   border-radius: 0 2vh 2vh 0;
   border-width: 1vh;
   border-color: #eee4da;
@@ -141,8 +177,8 @@ h2 {
 }
 
 .btn {
-  width: 25vh;
-  height: 8vh;
+  width: 20vh;
+  height: 6vh;
   background-color: #776e65;
   text-align: center;
   font-size: 4vh;
