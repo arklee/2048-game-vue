@@ -6,8 +6,9 @@
     <winToast :showWin="showWin"/>
     <GridBox :array="array" :size="size" :status="status" :score="score"/>
     <span style="display: flex; justify-content: center">
-      <span class="difficultyText">Difficulty</span>
-      <input value="4" class="input" type="number" ref="input" min="3" max="7"/>
+      <button class="minus" @click="()=>{this.inputSize--}">-</button>
+      <div class="sizeNumber">{{inputSize}}</div>
+      <button class="plus" @click="()=>{this.inputSize++}">+</button>
       <button ref="btn" @focusout="refocus" class="btn" @click="start">{{status === 'running' || status === 'won'? 'RESTART' : 'START'}}</button>
     </span>
   </div>
@@ -17,6 +18,7 @@
 import WinToast from "@/components/winToast";
 import GridBox from "./components/GridBox.vue";
 import {initArray, mov, up, down, right, left, checkFail, checkWin} from "./2048.js";
+import axios from 'axios'
 
 export default {
   name: "App",
@@ -31,6 +33,7 @@ export default {
       moveX: 0,
       moveY: 0,
       size: 4,
+      inputSize: 4,
       array: [
         [0, 0, 0, 0],
         [0, 0, 0, 0],
@@ -38,10 +41,15 @@ export default {
         [0, 0, 0, 0],
       ],
       score: 0,
-      highest: localStorage.getItem('a4') ? localStorage.getItem('a4') : 0,
       status: 'ready',
-      showWin: false
+      showWin: false,
+      highest: 0
     };
+  },
+  mounted() {
+    axios.get(`/getScore?size=4`).then(res => {
+      this.highest = res.data
+    })
   },
   methods: {
     touchstart(e) {
@@ -55,17 +63,17 @@ export default {
       let vertical = this.startY - this.moveY
       let x = 0
       if (Math.abs(horizon) > Math.abs(vertical)) { //上下
-        if (horizon > 100) {
+        if (horizon > 50) {
           x = 3
         }
-        else if (horizon < -100) {
+        else if (horizon < -50) {
           x = 4
         }
       } else {
-        if (vertical > 100) {
+        if (vertical > 50) {
           x = 1
         }
-        else if (vertical < -100) {
+        else if (vertical < -50) {
           x = 2
         }
       }
@@ -74,7 +82,7 @@ export default {
     start() {
       this.status = 'running'
       this.score = 0
-      let x = parseInt(this.$refs.input.value)
+      let x = this.inputSize
       if (x > 7 || x < 3) {
         alert("Please select a number from 3 to 7")
       }
@@ -82,7 +90,9 @@ export default {
         this.size = x
       }
       this.array = initArray(this.size)
-      this.highest = localStorage.getItem('a' + this.size) ? localStorage.getItem('a' + this.size) : 0
+      axios.get(`/getScore?size=${this.size}`).then(res => {
+        this.highest = res.data
+      })
     },
     refocus() {
       this.$nextTick(() => {
@@ -106,7 +116,7 @@ export default {
             this.score = result[1];
             if (this.score > this.highest) {
               this.highest = this.score
-              localStorage.setItem('a' + this.size, this.highest)
+              axios.get(`/setScore?size=${this.size}&score=${this.highest}`)
             }
           }
         };
@@ -125,64 +135,78 @@ export default {
           this.status = 'over';
         }
       }
-    },
-  },
+    }
+  }
 };
 </script>
 
 <style>
+body {
+  overscroll-behavior: contain;
+}
+
 #app {
   text-align: center;
   display: flex;
   flex-direction: column;
   font-family: "Lucida Sans", "Lucida Sans Regular", "Lucida Grande",
   "Lucida Sans Unicode", Geneva, Verdana, sans-serif;
+  height: 90vh;
 }
 
 h1 {
   color: #776e65;
-  font-size: 5vh;
+  font-size: 2rem;
 }
 
 h2 {
   color: #776e65;
-  font-size: 2.3vh;
+  font-size: 1rem;
   margin-top: 0;
 }
 
-.difficultyText {
-  display: flex;
-  justify-content: center;
-  width: 18vh;
-  height: 6.5vh;
+.plus {
+  width: 2.5rem;
+  height: 2.5rem;
   background-color: #eee4da;
   text-align: center;
-  font-size: 3vh;
+  font-size: 1.2rem;
   border-width: 0;
   color: #776e65;
-  border-radius: 2vh 0 0 2vh;
+  border-radius: 0 0.8rem 0.8rem 0;
+  margin-right: 3.2rem;
 }
 
-.input {
-  width: 6vh;
-  height: 4vh;
-  background-color: #ffffff;
+.minus {
+  width: 2.5rem;
+  height: 2.5rem;
+  background-color: #eee4da;
   text-align: center;
-  font-size: 3vh;
-  border-radius: 0 2vh 2vh 0;
-  border-width: 1vh;
-  border-color: #eee4da;
+  font-size: 1.2rem;
+  border-width: 0;
   color: #776e65;
-  margin-right: 8vh;
+  border-radius: 0.8rem 0 0 0.8rem;
+}
+
+.sizeNumber {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 2.5rem;
+  height: 2.5rem;
+  font-size: 1.2rem;
+  color: #776e65;
+  background-color: #eee4da;
+  border-width: 0;
 }
 
 .btn {
-  width: 20vh;
-  height: 6vh;
+  width: 8rem;
+  height: 2.4rem;
   background-color: #776e65;
   text-align: center;
-  font-size: 4vh;
-  border-radius: 2vh;
+  font-size: 1.6rem;
+  border-radius: 0.8rem;
   border-width: 0;
   color: #eee4da;
 }

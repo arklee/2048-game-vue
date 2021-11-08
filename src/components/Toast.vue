@@ -35,25 +35,25 @@ export default {
 }
 
 .toast {
-  padding: 1vh;
-  width: 50vh;
-  height: 50vh;
+  padding: 0.3rem;
+  width: 20rem;
+  height: 20rem;
   border-radius: 3%;
   position: fixed;
   left: 50%;
-  margin-left: -26vh;
+  margin-left: -10.3rem;
   font-weight: bold;
 }
 
 .readyToast {
   background-color: rgba(89, 86, 86, 0.5);
   color: #d9d6cf;
-  font-size: 9vh;
+  font-size: 3.6rem;
 }
 
 .overToast {
   background-color: rgba(89, 86, 86, 0.85);
   color: #d9d6cf;
-  font-size: 7vh;
+  font-size: 2.8rem;
 }
 </style>

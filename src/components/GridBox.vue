@@ -1,7 +1,7 @@
 <template>
   <div>
     <Toast :status="status" :score="score"/>
-    <div class="container" :style="{'grid-template-columns': `repeat(${size}, ${100/size}%)`, 'grid-template-rows': `repeat(${size}, ${100/size}%)`, 'font-size': `${18/size}vh`}">
+    <div class="container" :style="{'grid-template-columns': `repeat(${size}, ${100/size}%)`, 'grid-template-rows': `repeat(${size}, ${100/size}%)`, 'font-size': `${7/size}rem`}">
       <template v-for="(row, rowIndex) in array">
         <div
             class="box"
@@ -88,33 +88,33 @@ export default {
 
 <style scoped>
 .container {
-  width: 50vh;
-  height: 50vh;
+  width: 20rem;
+  height: 20rem;
   display: grid;
   background-color: #bbada0;
-  padding: 0.8vh;
+  padding: 0.3rem;
   border-radius: 3%;
   margin: 0 auto;
 }
 
 .themes {
-  margin-top: 1vh;
-  margin-bottom: 2vh;
+  margin-top: 0.4rem;
+  margin-bottom: 0.8rem;
 }
 
 label{
-  margin: 1.2vw;
+  margin: 0.5rem;
   color: #776e65;
-  font-size: 2.5vh;
+  font-size: 1rem;
 }
 label input {
-  width: 2vh;
-  height: 2vh;
+  width: 1rem;
+  height: 1rem;
 }
 
 .box {
   background-color: #cdc1b4;
-  margin: 0.66vh;
+  margin: 0.26rem;
   border-radius: 12%;
   display: flex;
   justify-content: center;

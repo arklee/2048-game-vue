@@ -29,7 +29,7 @@ export default {
 .text {
   margin-top: 30vh;
   color: #edc22e;
-  font-size: 20vh;
+  font-size: 20vw;
 }
 
 .fade-enter-active, .fade-leave-active {

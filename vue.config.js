@@ -5,5 +5,8 @@ module.exports = {
             title: '2048 Puzzle Game'
         }
     },
-    lintOnSave: false
+    lintOnSave: false,
+    devServer: {
+        proxy: 'http://localhost:3000'
+    }
 }
