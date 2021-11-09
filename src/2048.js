@@ -21,95 +21,125 @@ function generate(array, size) {
   array[i][j] = cre_num();
 }
 
-export function mov(array, score, f, size) {
+export function action(array, score, a, size) {
   let oldArrayString = JSON.stringify(array)
   let newArray = JSON.parse(oldArrayString)
-  score = f(newArray, score, size)
+  // [score, move] = (f => f(newArray, score, size))((() => {
+  //   if (a === 1) return up
+  //   else if (a === 2) return down
+  //   else if (a === 3) return left
+  //   else if (a === 4) return right
+  // })())
+  let move, newScore
+  if (a === 1) [newScore, move] = up(newArray, score, size)
+  else if (a === 2) [newScore, move] = down(newArray, score, size)
+  else if (a === 3) [newScore, move] = left(newArray, score, size)
+  else if (a === 4) [newScore, move] = right(newArray, score, size)
   let changed
   if (JSON.stringify(newArray) === oldArrayString) {
     changed = false
-  }
-  else {
+  } else {
     changed = true
     generate(newArray, size);
   }
-  return [newArray, score, changed]
+  return {
+    newArray,
+    newScore,
+    changed,
+    move
+  }
 }
 
-export function down(array, score, size) {
+function down(array, score, size) {
+  let move = []
   for (let m = 0; m < size; m++)
     for (let j = size - 1; j >= 1; j--)
       for (let i = j - 1; i >= 0; i--) {
-        if (array[i][m] === 0 || array[j][m] === 0) {
-          array[j][m] = Math.max(array[i][m], array[j][m])
-          array[i][m] = 0
+        if (array[i][m] !== 0) {
+          if (array[j][m] === 0) {
+            array[j][m] = array[i][m]
+            array[i][m] = 0
+            move.push([[i, m], [j, m]])
+          }
+          if (array[i][m] === array[j][m]) {
+            array[j][m]++
+            array[i][m] = 0
+            move.push([[i, m], [j, m]])
+            score = score + 2 ** array[j][m]
+            break
+          }
         }
-        else if (array[i][m] === array[j][m]) {
-          array[j][m] = array[i][m] + 1
-          array[i][m] = 0
-          score = score + 2 ** array[j][m]
-          break
-        }
-        else break
       }
-  return score
+  return [score, move]
 }
 
-export function up(array, score, size) {
+function up(array, score, size) {
+  let move = []
   for (let m = 0; m < size; m++)
     for (let i = 0; i < size - 1; i++)
       for (let j = i + 1; j < size; j++) {
-        if (array[i][m] === 0 || array[j][m] === 0) {
-          array[i][m] = Math.max(array[i][m], array[j][m])
-          array[j][m] = 0
+        if (array[j][m] !== 0) {
+          if (array[i][m] === 0) {
+            array[i][m] = array[j][m]
+            array[j][m] = 0
+            move.push([[j, m], [i, m]])
+          }
+          if (array[i][m] === array[j][m]) {
+            array[i][m]++
+            array[j][m] = 0
+            move.push([[j, m], [i, m]])
+            score = score + 2 ** array[i][m]
+            break
+          }
         }
-        else if (array[i][m] === array[j][m]) {
-          array[i][m] = array[i][m] + 1
-          array[j][m] = 0
-          score = score + 2 ** array[i][m]
-          break
-        }
-        else break
       }
-  return score
+  return [score, move]
 }
 
-export function left(array, score, size) {
+function left(array, score, size) {
+  let move = []
   for (let m = 0; m < size; m++)
     for (let i = 0; i < size; i++)
       for (let j = i + 1; j < size; j++) {
-        if (array[m][i] === 0 || array[m][j] === 0) {
-          array[m][i] = Math.max(array[m][i], array[m][j])
-          array[m][j] = 0
+        if (array[m][j] !== 0) {
+          if (array[m][i] === 0) {
+            array[m][i] = array[m][j]
+            array[m][j] = 0
+            move.push([[m, j], [m, i]])
+          }
+          if (array[m][i] === array[m][j]) {
+            array[m][i]++
+            array[m][j] = 0
+            move.push([[m, j], [m, i]])
+            score = score + 2 ** array[m][i]
+            break
+          }
         }
-        else if (array[m][i] === array[m][j]) {
-          array[m][i] = array[m][i] + 1
-          array[m][j] = 0
-          score = score + 2 ** array[m][i]
-          break
-        }
-        else break
       }
-  return score
+  return [score, move]
 }
 
-export function right(array, score, size) {
+function right(array, score, size) {
+  let move = []
   for (let m = 0; m < size; m++)
     for (let j = size - 1; j >= 0; j--)
       for (let i = j - 1; i >= 0; i--) {
-        if (array[m][i] === 0 || array[m][j] === 0) {
-          array[m][j] = Math.max(array[m][i], array[m][j])
-          array[m][i] = 0
+        if (array[m][i] !== 0) {
+          if (array[m][j] === 0) {
+            array[m][j] = array[m][i]
+            array[m][i] = 0
+            move.push([[m, i], [m, j]])
+          }
+          if (array[m][j] === array[m][i]) {
+            array[m][j]++
+            array[m][i] = 0
+            score = score + 2 ** array[m][j]
+            move.push([[m, i], [m, j]])
+            break
+          }
         }
-        else if (array[m][i] === array[m][j]) {
-          array[m][j] = array[m][i] + 1
-          array[m][i] = 0
-          score = score + 2 ** array[m][j]
-          break
-        }
-        else break
       }
-  return score
+  return [score, move]
 }
 
 export function checkFail(array, size) {

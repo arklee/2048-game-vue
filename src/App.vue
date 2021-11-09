@@ -24,7 +24,7 @@
 <script>
 import WinToast from "@/components/winToast";
 import GridBox from "./components/GridBox.vue";
-import {initArray, mov, up, down, right, left, checkFail, checkWin} from "./2048.js";
+import {initArray, action, checkFail, checkWin} from "./2048.js";
 import axios from 'axios'
 
 export default {
@@ -84,19 +84,20 @@ export default {
       this.moveY = e.changedTouches[0].clientY
       let horizon = this.startX - this.moveX
       let vertical = this.startY - this.moveY
-      let x = 0
-      if (Math.abs(horizon) < Math.abs(vertical)) {
-        if (vertical > 0)
+      if (Math.abs(horizon) < Math.abs(vertical))
+      {
+        if (vertical > 30)
           this.move(1)
-        else
+        else if (vertical < -30)
           this.move(2)
-      } else {
-        if (horizon > 0)
+      }
+      else
+      {
+        if (horizon > 30)
           this.move(3)
-        else
+        else if (horizon < -30)
           this.move(4)
       }
-      this.move(x)
     },
     start() {
       this.status = 'running'
@@ -116,29 +117,25 @@ export default {
       })
     },
     keydown(e) {
-      let x = 0
-      if (e.key === "ArrowUp") x = 1
-      else if (e.key === "ArrowDown") x = 2
-      else if (e.key === "ArrowLeft") x = 3
-      else if (e.key === "ArrowRight") x = 4
-      this.move(x)
+      if (e.key === "ArrowUp") this.move(1)
+      else if (e.key === "ArrowDown") this.move(2)
+      else if (e.key === "ArrowLeft") this.move(3)
+      else if (e.key === "ArrowRight") this.move(4)
+
     },
     move(a) {
       if (this.status === 'running' || this.status === 'won') {
         let f = (x) => {
-          let result = mov(this.array, this.score, x, this.size);
-          if (result[2]) {
-            this.array = result[0];
-            this.score = result[1];
+          let result = action(this.array, this.score, x, this.size);
+          if (result.changed) {
+            this.array = result.newArray;
+            this.score = result.newScore;
             if (this.score > this.highest) {
               this.highest = this.score
             }
           }
         };
-        if (a === 1) f(up);
-        else if (a === 2) f(down);
-        else if (a === 3) f(left);
-        else if (a === 4) f(right);
+        f(a)
         if (checkWin(this.array, this.size, this.status === 'won')) {
           this.status = 'won'
           this.showWin = true
@@ -167,6 +164,7 @@ body {
   display: flex;
   flex-direction: column;
   height: 90vh;
+  font-family: "Lucida Sans", sans-serif;
 }
 
 .title {
@@ -235,6 +233,5 @@ body {
   border-radius: 0.8rem;
   border-width: 0;
   color: #eee4da;
-  font-family: "Earth Orbiter Bold", serif;
 }
 </style>

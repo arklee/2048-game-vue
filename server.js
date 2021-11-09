@@ -3,6 +3,8 @@ const fs=require('fs');
 const app = express()
 const port = 3000
 
+app.use(express.static('dist'))
+
 app.get('/getScore', (req, res) => {
   fs.readFile('./scoreData/a' + req.query.size, function (err, data) {
     if (err) {
