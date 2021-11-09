@@ -1,10 +1,12 @@
 <template>
   <div>
     <div class="themes">
-      <label><input type="radio" name="theme" value="defaultShow" v-model="showString"/>Default</label>
-      <label><input type="radio" name="theme" value="threeShow" v-model="showString"/>" 3 "</label>
-      <label><input type="radio" name="theme" value="chineseShow" v-model="showString"/>Chinese</label>
-      <label><input type="radio" name="theme" value="taoistShow" v-model="showString"/>Taoist</label>
+      <label><input type="radio" name="theme" value="default" v-model="showString"/>Default</label>
+      <label><input type="radio" name="theme" value="three" v-model="showString"/>" 3 "</label>
+      <label><input type="radio" name="theme" value="chineseS" v-model="showString"/>Chinese</label>
+      <label><input type="radio" name="theme" value="taoist" v-model="showString"/>Taoist</label>
+      <label><input type="radio" name="theme" value="rank" v-model="showString"/>LOL</label>
+      <label><input type="radio" name="theme" value="test" v-model="showString"/>Blank</label>
     </div>
     <Toast :status="status" :score="score"/>
     <div class="container" :style="{'grid-template-columns': `repeat(${size}, ${100/size}%)`, 'grid-template-rows': `repeat(${size}, ${100/size}%)`, 'font-size': `${5.5/size}rem`}">
@@ -30,23 +32,20 @@ export default {
   props: ["array", "size", "status", 'score'],
   data(){
     return {
-      showString: 'defaultShow'
+      showString: 'default'
     }
   },
   methods:{
     show(s, x) {
-      if (s === 'defaultShow') return this.defaultShow(x)
-      else if (s === 'threeShow') return this.threeShow(x)
-      else if (s === 'chineseShow') return this.chineseShow(x)
-      else if (s === 'taoistShow') return this.taoistShow(x)
+      return this[s](x)
     },
-    defaultShow(x) {
+    default(x) {
       return x === 0 ? '' : 2 ** x
     },
-    threeShow(x) {
+    three(x) {
       return x === 0 ? '' : (2 ** x) / 2 * 3
     },
-    chineseShow(x) {
+    chinese(x) {
       if (x === 0) return ""
       else if (x === 1) return "二"
       else if (x === 2) return "四"
@@ -60,11 +59,11 @@ export default {
       else if (x === 10) return "一千零二十四"
       else if (x === 11) return "两千零四十八"
       else if (x === 12) return "四千零九十六"
-      else if (x === 13) return "八千一百九十二"
-      else if (x === 14) return "一万六千三百八十四"
-      else return '你在赣神魔？'
+      else if (x === 13) return "八千一伯？"
+      else if (x === 14) return "一万六？"
+      else return "世界那么大。"
     },
-    taoistShow(x) {
+    taoist(x) {
       if (x === 0) return ""
       else if (x === 1) return "炼气"
       else if (x === 2) return "筑基"
@@ -80,7 +79,28 @@ export default {
       else if (x === 12) return "大乘"
       else if (x === 13) return "散仙"
       else if (x === 14) return "金仙"
-      else return '我不会了'
+      else return "给我整不会了"
+    },
+    rank(x) {
+      if (x === 0) return ""
+      else if (x === 1) return "瓜皮"
+      else if (x === 2) return "黑铁"
+      else if (x === 3) return "黄铜"
+      else if (x === 4) return "白银"
+      else if (x === 5) return "黄金"
+      else if (x === 6) return "铂金"
+      else if (x === 7) return "钻石"
+      else if (x === 8) return "小代"
+      else if (x === 9) return "大师"
+      else if (x === 10) return "宗师"
+      else if (x === 11) return "王者"
+      else if (x === 12) return "通天代"
+      else if (x === 13) return "职业选手"
+      else if (x === 14) return "Faker"
+      else return '你在赣神魔？'
+    },
+    test(x) {
+      return ''
     }
   }
 };
@@ -98,18 +118,22 @@ export default {
 }
 
 .themes {
-  margin-top: 1rem;
-  margin-bottom: 1rem;
+  width: 20rem;
+  display: grid;
+  grid-template-columns: repeat(3, 33%);
+  grid-template-rows: repeat(2, 50%);
+  margin: 1rem auto 1rem auto;
 }
 
 label{
-  margin: 0.4rem;
+  margin-top: 0.5rem;
   color: #776e65;
   font-size: 1rem;
 }
+
 label input {
-  width: 1rem;
-  height: 1rem;
+  width: 0.7rem;
+  height: 0.7rem;
 }
 
 .box {
@@ -121,6 +145,7 @@ label input {
   align-items: center;
   font-weight: bold;
   color: #776e65;
+  overflow: hidden;
 }
 
 .c1 {

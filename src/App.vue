@@ -3,7 +3,7 @@
     <span class="title" style="margin-top: 1rem">
       <span style="display: flex; flex-direction: column; margin: 0 2.5rem 0 0.5rem; justify-content: space-between">
         <span class="h1">2048</span>
-        <span class="h2">Your Score: {{ score }}</span>
+        <span class="h2">Ur Score: {{ score }}</span>
         <span class="h2">Highest: {{ highest }}</span>
         <!--      <span class="h2" v-if="status === 'running' || status === 'won'">Current Score: {{ score }} | Highest Score: {{highest }}</span>-->
         <!--      <span class="h2" v-else>Highest Score: {{ highest }}</span>-->
@@ -179,7 +179,7 @@ body {
 .title {
   display: flex;
   justify-content: center;
-  height: 6rem;
+  height: 6.2rem;
 }
 
 .h1 {
@@ -190,8 +190,10 @@ body {
 }
 
 .h2 {
-  color: #776e65;
-  font-size: 1.5rem;
+  display: flex;
+  align-items: flex-end;
+  color: #857b71;
+  font-size: 1.2rem;
   flex: 1;
 }
 
