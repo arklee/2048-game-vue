@@ -3,7 +3,7 @@
     <div class="themes">
       <label><input type="radio" name="theme" value="default" v-model="showString"/>Default</label>
       <label><input type="radio" name="theme" value="three" v-model="showString"/>" 3 "</label>
-      <label><input type="radio" name="theme" value="chineseS" v-model="showString"/>Chinese</label>
+      <label><input type="radio" name="theme" value="chinese" v-model="showString"/>Chinese</label>
       <label><input type="radio" name="theme" value="taoist" v-model="showString"/>Taoist</label>
       <label><input type="radio" name="theme" value="rank" v-model="showString"/>LOL</label>
       <label><input type="radio" name="theme" value="test" v-model="showString"/>Blank</label>
@@ -122,7 +122,7 @@ export default {
   display: grid;
   grid-template-columns: repeat(3, 33%);
   grid-template-rows: repeat(2, 50%);
-  margin: 1rem auto 1rem auto;
+  margin: 0 auto 1rem auto;
 }
 
 label{

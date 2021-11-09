@@ -1,12 +1,10 @@
 <template>
   <div id="app" @touchstart="touchstart" @touchend="touchend" @keydown="keydown">
-    <span class="title" style="margin-top: 1rem">
-      <span style="display: flex; flex-direction: column; margin: 0 2.5rem 0 0.5rem; justify-content: space-between">
+    <span class="title" style="margin: 1rem auto">
+      <span>
         <span class="h1">2048</span>
         <span class="h2">Ur Score: {{ score }}</span>
         <span class="h2">Highest: {{ highest }}</span>
-        <!--      <span class="h2" v-if="status === 'running' || status === 'won'">Current Score: {{ score }} | Highest Score: {{highest }}</span>-->
-        <!--      <span class="h2" v-else>Highest Score: {{ highest }}</span>-->
       </span>
       <span style="display: flex; flex-direction: column; justify-content: space-between">
         <span style="display: flex">
@@ -87,18 +85,16 @@ export default {
       let horizon = this.startX - this.moveX
       let vertical = this.startY - this.moveY
       let x = 0
-      if (Math.abs(horizon) > Math.abs(vertical)) { //上下
-        if (horizon > 50) {
-          x = 3
-        } else if (horizon < -50) {
-          x = 4
-        }
+      if (Math.abs(horizon) < Math.abs(vertical)) {
+        if (vertical > 0)
+          this.move(1)
+        else
+          this.move(2)
       } else {
-        if (vertical > 50) {
-          x = 1
-        } else if (vertical < -50) {
-          x = 2
-        }
+        if (horizon > 0)
+          this.move(3)
+        else
+          this.move(4)
       }
       this.move(x)
     },
@@ -162,8 +158,6 @@ export default {
 
 <style>
 
-@import url(//db.onlinewebfonts.com/c/141f0082275e5cdbcbe7f18a4cc033ec?family=Earth+Orbiter+Bold);
-
 body {
   overscroll-behavior: contain;
 }
@@ -173,20 +167,22 @@ body {
   display: flex;
   flex-direction: column;
   height: 90vh;
-  font-family: "Earth Orbiter Bold", serif;
 }
 
 .title {
   display: flex;
-  justify-content: center;
+  justify-content: space-between;
   height: 6.2rem;
+  width: 19rem;
 }
 
 .h1 {
+  display: flex;
+  align-items: flex-start;
+  justify-content: flex-start;
   color: #776e65;
   font-size: 2.5rem;
   font-weight: bolder;
-  flex: 2;
 }
 
 .h2 {
@@ -194,7 +190,6 @@ body {
   align-items: flex-end;
   color: #857b71;
   font-size: 1.2rem;
-  flex: 1;
 }
 
 .plus {
