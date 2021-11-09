@@ -1,16 +1,25 @@
 <template>
   <div id="app" @touchstart="touchstart" @touchend="touchend" @keydown="keydown">
-    <h1>2048 Puzzle Game</h1>
-    <h2 v-if="status === 'running' || status === 'won'">Current Score: {{ score }} | Highest Score: {{ highest }}</h2>
-    <h2 v-else>Highest Score: {{ highest }}</h2>
+    <span class="title" style="margin-top: 1rem">
+      <span style="display: flex; flex-direction: column; margin: 0 2.5rem 0 0.5rem; justify-content: space-between">
+        <span class="h1">2048</span>
+        <span class="h2">Your Score: {{ score }}</span>
+        <span class="h2">Highest: {{ highest }}</span>
+        <!--      <span class="h2" v-if="status === 'running' || status === 'won'">Current Score: {{ score }} | Highest Score: {{highest }}</span>-->
+        <!--      <span class="h2" v-else>Highest Score: {{ highest }}</span>-->
+      </span>
+      <span style="display: flex; flex-direction: column; justify-content: space-between">
+        <span style="display: flex">
+          <button class="minus" @click="()=>{this.inputSize--}">-</button>
+          <span class="sizeNumber">{{ inputSize }}</span>
+          <button class="plus" @click="()=>{this.inputSize++}">+</button>
+        </span>
+        <button ref="btn" @focusout="refocus" class="start"
+                @click="start">{{ status === 'running' || status === 'won' ? 'RESTART' : 'START' }}</button>
+      </span>
+    </span>
     <winToast :showWin="showWin"/>
     <GridBox :array="array" :size="size" :status="status" :score="score"/>
-    <span style="display: flex; justify-content: center">
-      <button class="minus" @click="()=>{this.inputSize--}">-</button>
-      <div class="sizeNumber">{{inputSize}}</div>
-      <button class="plus" @click="()=>{this.inputSize++}">+</button>
-      <button ref="btn" @focusout="refocus" class="btn" @click="start">{{status === 'running' || status === 'won'? 'RESTART' : 'START'}}</button>
-    </span>
   </div>
 </template>
 
@@ -47,11 +56,27 @@ export default {
     };
   },
   mounted() {
-    axios.get(`/getScore?size=4`).then(res => {
-      this.highest = res.data
+    this.getScore(4);
+    const timer = setInterval(() => {
+      if (this.status === 'running' || this.status === 'won') {
+        this.setScore(this.size, this.score)
+      }
+    }, 5000)
+    this.$once('hook:beforeDestroy', () => {
+      clearInterval(timer)
     })
   },
   methods: {
+    getScore(size) {
+      axios.get(`/getScore?size=${size}`).then(res => {
+        this.highest = res.data
+      })
+    },
+    setScore(size, score) {
+      if (this.score === this.highest) {
+        axios.get(`/setScore?size=${size}&score=${score}`)
+      }
+    },
     touchstart(e) {
       this.startX = e.touches[0].clientX
       this.startY = e.touches[0].clientY
@@ -65,15 +90,13 @@ export default {
       if (Math.abs(horizon) > Math.abs(vertical)) { //上下
         if (horizon > 50) {
           x = 3
-        }
-        else if (horizon < -50) {
+        } else if (horizon < -50) {
           x = 4
         }
       } else {
         if (vertical > 50) {
           x = 1
-        }
-        else if (vertical < -50) {
+        } else if (vertical < -50) {
           x = 2
         }
       }
@@ -85,14 +108,11 @@ export default {
       let x = this.inputSize
       if (x > 7 || x < 3) {
         alert("Please select a number from 3 to 7")
-      }
-      else {
+      } else {
         this.size = x
       }
       this.array = initArray(this.size)
-      axios.get(`/getScore?size=${this.size}`).then(res => {
-        this.highest = res.data
-      })
+      this.getScore(this.size)
     },
     refocus() {
       this.$nextTick(() => {
@@ -116,7 +136,6 @@ export default {
             this.score = result[1];
             if (this.score > this.highest) {
               this.highest = this.score
-              axios.post(`/setScore?size=${this.size}&score=${this.highest}`)
             }
           }
         };
@@ -124,15 +143,16 @@ export default {
         else if (a === 2) f(down);
         else if (a === 3) f(left);
         else if (a === 4) f(right);
-        if(checkWin(this.array, this.size, this.status === 'won')) {
+        if (checkWin(this.array, this.size, this.status === 'won')) {
           this.status = 'won'
           this.showWin = true
           setTimeout(() => {
             this.showWin = false
-          },3000)
+          }, 3000)
         }
         if (checkFail(this.array, this.size)) {
           this.status = 'over';
+          this.setScore(this.size, this.highest)
         }
       }
     }
@@ -141,6 +161,9 @@ export default {
 </script>
 
 <style>
+
+@import url(//db.onlinewebfonts.com/c/141f0082275e5cdbcbe7f18a4cc033ec?family=Earth+Orbiter+Bold);
+
 body {
   overscroll-behavior: contain;
 }
@@ -149,37 +172,43 @@ body {
   text-align: center;
   display: flex;
   flex-direction: column;
-  font-family: "Lucida Sans", "Lucida Sans Regular", "Lucida Grande",
-  "Lucida Sans Unicode", Geneva, Verdana, sans-serif;
   height: 90vh;
+  font-family: "Earth Orbiter Bold", serif;
 }
 
-h1 {
-  color: #776e65;
-  font-size: 2rem;
+.title {
+  display: flex;
+  justify-content: center;
+  height: 6rem;
 }
 
-h2 {
+.h1 {
   color: #776e65;
-  font-size: 1rem;
-  margin-top: 0;
+  font-size: 2.5rem;
+  font-weight: bolder;
+  flex: 2;
+}
+
+.h2 {
+  color: #776e65;
+  font-size: 1.5rem;
+  flex: 1;
 }
 
 .plus {
-  width: 2.5rem;
-  height: 2.5rem;
+  width: 2.7rem;
+  height: 2.7rem;
   background-color: #eee4da;
   text-align: center;
   font-size: 1.2rem;
   border-width: 0;
   color: #776e65;
   border-radius: 0 0.8rem 0.8rem 0;
-  margin-right: 3.2rem;
 }
 
 .minus {
-  width: 2.5rem;
-  height: 2.5rem;
+  width: 2.7rem;
+  height: 2.7rem;
   background-color: #eee4da;
   text-align: center;
   font-size: 1.2rem;
@@ -192,22 +221,23 @@ h2 {
   display: flex;
   justify-content: center;
   align-items: center;
-  width: 2.5rem;
-  height: 2.5rem;
+  width: 2.7rem;
+  height: 2.7rem;
   font-size: 1.2rem;
   color: #776e65;
   background-color: #eee4da;
   border-width: 0;
 }
 
-.btn {
-  width: 8rem;
-  height: 2.4rem;
+.start {
+  width: 8.1rem;
+  height: 2.7rem;
   background-color: #776e65;
   text-align: center;
-  font-size: 1.6rem;
+  font-size: 1.4rem;
   border-radius: 0.8rem;
   border-width: 0;
   color: #eee4da;
+  font-family: "Earth Orbiter Bold", serif;
 }
 </style>

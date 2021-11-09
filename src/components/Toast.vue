@@ -35,6 +35,8 @@ export default {
 }
 
 .toast {
+  display: flex;
+  align-items: center;
   padding: 0.3rem;
   width: 20rem;
   height: 20rem;

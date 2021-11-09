@@ -1,7 +1,13 @@
 <template>
   <div>
+    <div class="themes">
+      <label><input type="radio" name="theme" value="defaultShow" v-model="showString"/>Default</label>
+      <label><input type="radio" name="theme" value="threeShow" v-model="showString"/>" 3 "</label>
+      <label><input type="radio" name="theme" value="chineseShow" v-model="showString"/>Chinese</label>
+      <label><input type="radio" name="theme" value="taoistShow" v-model="showString"/>Taoist</label>
+    </div>
     <Toast :status="status" :score="score"/>
-    <div class="container" :style="{'grid-template-columns': `repeat(${size}, ${100/size}%)`, 'grid-template-rows': `repeat(${size}, ${100/size}%)`, 'font-size': `${7/size}rem`}">
+    <div class="container" :style="{'grid-template-columns': `repeat(${size}, ${100/size}%)`, 'grid-template-rows': `repeat(${size}, ${100/size}%)`, 'font-size': `${5.5/size}rem`}">
       <template v-for="(row, rowIndex) in array">
         <div
             class="box"
@@ -12,12 +18,6 @@
           {{ show(showString, x) }}
         </div>
       </template>
-    </div>
-    <div class="themes">
-      <label><input type="radio" name="theme" value="defaultShow" v-model="showString"/>Default</label>
-      <label><input type="radio" name="theme" value="threeShow" v-model="showString"/>" 3 "</label>
-      <label><input type="radio" name="theme" value="chineseShow" v-model="showString"/>Chinese</label>
-      <label><input type="radio" name="theme" value="taoistShow" v-model="showString"/>Taoist</label>
     </div>
   </div>
 </template>
@@ -98,12 +98,12 @@ export default {
 }
 
 .themes {
-  margin-top: 0.4rem;
-  margin-bottom: 0.8rem;
+  margin-top: 1rem;
+  margin-bottom: 1rem;
 }
 
 label{
-  margin: 0.5rem;
+  margin: 0.4rem;
   color: #776e65;
   font-size: 1rem;
 }

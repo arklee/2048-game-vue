@@ -12,8 +12,8 @@ app.get('/getScore', (req, res) => {
   })
 })
 
-app.post('/setScore', (req) => {
-  fs.writeFile('./scoreData/a' + req.query.size, JSON.stringify(req.query.score), function (err, data) {
+app.get('/setScore', (req) => {
+  fs.writeFile('./scoreData/a' + req.query.size, JSON.stringify(req.query.score), function (err) {
     if (err) {
       return console.error(err);
     }
