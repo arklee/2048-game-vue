@@ -30,11 +30,11 @@ export function action(array, score, a, size) {
   //   else if (a === 3) return left
   //   else if (a === 4) return right
   // })())
-  let move, newScore
-  if (a === 1) [newScore, move] = up(newArray, score, size)
-  else if (a === 2) [newScore, move] = down(newArray, score, size)
-  else if (a === 3) [newScore, move] = left(newArray, score, size)
-  else if (a === 4) [newScore, move] = right(newArray, score, size)
+  let newScore
+  if (a === 1) newScore = up(newArray, score, size)
+  else if (a === 2) newScore = down(newArray, score, size)
+  else if (a === 3) newScore = left(newArray, score, size)
+  else if (a === 4) newScore = right(newArray, score, size)
   let changed
   if (JSON.stringify(newArray) === oldArrayString) {
     changed = false
@@ -46,12 +46,10 @@ export function action(array, score, a, size) {
     newArray,
     newScore,
     changed,
-    move
   }
 }
 
 function down(array, score, size) {
-  let move = []
   for (let m = 0; m < size; m++)
     for (let j = size - 1; j >= 1; j--)
       for (let i = j - 1; i >= 0; i--) {
@@ -59,22 +57,19 @@ function down(array, score, size) {
           if (array[j][m] === 0) {
             array[j][m] = array[i][m]
             array[i][m] = 0
-            move.push([[i, m], [j, m]])
           }
           if (array[i][m] === array[j][m]) {
             array[j][m]++
             array[i][m] = 0
-            move.push([[i, m], [j, m]])
             score = score + 2 ** array[j][m]
             break
           }
         }
       }
-  return [score, move]
+  return score
 }
 
 function up(array, score, size) {
-  let move = []
   for (let m = 0; m < size; m++)
     for (let i = 0; i < size - 1; i++)
       for (let j = i + 1; j < size; j++) {
@@ -82,22 +77,18 @@ function up(array, score, size) {
           if (array[i][m] === 0) {
             array[i][m] = array[j][m]
             array[j][m] = 0
-            move.push([[j, m], [i, m]])
           }
           if (array[i][m] === array[j][m]) {
             array[i][m]++
             array[j][m] = 0
-            move.push([[j, m], [i, m]])
-            score = score + 2 ** array[i][m]
             break
           }
         }
       }
-  return [score, move]
+  return score
 }
 
 function left(array, score, size) {
-  let move = []
   for (let m = 0; m < size; m++)
     for (let i = 0; i < size; i++)
       for (let j = i + 1; j < size; j++) {
@@ -105,22 +96,19 @@ function left(array, score, size) {
           if (array[m][i] === 0) {
             array[m][i] = array[m][j]
             array[m][j] = 0
-            move.push([[m, j], [m, i]])
           }
           if (array[m][i] === array[m][j]) {
             array[m][i]++
             array[m][j] = 0
-            move.push([[m, j], [m, i]])
             score = score + 2 ** array[m][i]
             break
           }
         }
       }
-  return [score, move]
+  return score
 }
 
 function right(array, score, size) {
-  let move = []
   for (let m = 0; m < size; m++)
     for (let j = size - 1; j >= 0; j--)
       for (let i = j - 1; i >= 0; i--) {
@@ -128,18 +116,16 @@ function right(array, score, size) {
           if (array[m][j] === 0) {
             array[m][j] = array[m][i]
             array[m][i] = 0
-            move.push([[m, i], [m, j]])
           }
           if (array[m][j] === array[m][i]) {
             array[m][j]++
             array[m][i] = 0
             score = score + 2 ** array[m][j]
-            move.push([[m, i], [m, j]])
             break
           }
         }
       }
-  return [score, move]
+  return score
 }
 
 export function checkFail(array, size) {

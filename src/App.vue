@@ -103,8 +103,12 @@ export default {
       this.status = 'running'
       this.score = 0
       let x = this.inputSize
-      if (x > 7 || x < 3) {
-        alert("Please select a number from 3 to 7")
+      if (x > 7) {
+        this.size = 7
+        this.inputSize = 7
+      } else if(x < 3) {
+        this.size = 3
+        this.inputSize = 3
       } else {
         this.size = x
       }
