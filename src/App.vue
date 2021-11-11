@@ -72,7 +72,7 @@ export default {
     },
     setScore(size, score) {
       if (this.score === this.highest) {
-        axios.get(`/setScore?size=${size}&score=${score}`)
+        axios.post(`/setScore`, {data:{size,score}})
       }
     },
     touchstart(e) {

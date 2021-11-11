@@ -25,4 +25,4 @@ $ node server.js
 ```bash
 $ yarn build #需要安装yarn，或npm build
 ```
-将dist、scoreData、server.js上传至服务器，并修改server.js中的端口号。随后运行node server.js即可（同样需要安装node，但不需要npm/yarn）
+将dist、scoreData、server.js上传至服务器，并修改server.js中的端口号。随后运行node server.js即可（同样需要安装node，并安装express）

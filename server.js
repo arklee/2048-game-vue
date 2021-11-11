@@ -4,6 +4,8 @@ const app = express()
 const port = 3000
 
 app.use(express.static('dist'))
+app.use(express.urlencoded({ extended: true }));
+app.use(express.json());
 
 app.get('/getScore', (req, res) => {
   fs.readFile('./scoreData/a' + req.query.size, function (err, data) {
@@ -14,8 +16,8 @@ app.get('/getScore', (req, res) => {
   })
 })
 
-app.get('/setScore', (req) => {
-  fs.writeFile('./scoreData/a' + req.query.size, JSON.stringify(req.query.score), function (err) {
+app.post('/setScore', (req) => {
+  fs.writeFile('./scoreData/a' + req.body.data.size, JSON.stringify(req.body.data.score), function (err) {
     if (err) {
       return console.error(err);
     }
