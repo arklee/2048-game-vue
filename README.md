@@ -1,7 +1,7 @@
 ## 2048-game-vue
 
 使用vue构建的2048网页小游戏，可调大小，选择不同文字。PC端使用上下左右键操作，移动端滑动操作。  
-演示：[2048 Demo](http://www.iwannacode.space).
+演示：[2048 Demo](http://121.37.93.156/).
 
 ![preview](screenshot/image1.png)
 
