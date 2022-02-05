@@ -1,8 +1,9 @@
 ## 2048-game-vue
 
-使用vue构建的2048网页小游戏，可调大小，选择不同文字。PC端使用上下左右键操作，移动端滑动操作
+使用vue构建的2048网页小游戏，可调大小，选择不同文字。PC端使用上下左右键操作，移动端滑动操作。
+demo: https://iwannacode.space/2048.html
 
-![preview](screenshot/image1.png)
+![preview](/screenshot/image1.png)
 
 ### 构建
 请先自行安装node、yarn/npm
@@ -25,4 +26,3 @@ $ node server.js
 ```bash
 $ yarn build #需要安装yarn，或npm build
 ```
-将dist、scoreData、server.js上传至服务器，并修改server.js中的端口号。随后运行node server.js即可（同样需要安装node，并安装express）
