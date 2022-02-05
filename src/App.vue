@@ -13,7 +13,7 @@
           <button class="plus" @click="()=>{this.inputSize++}">+</button>
         </span>
         <button ref="btn" @focusout="refocus" class="start"
-                @click="start">{{ status === 'running' || status === 'won' ? 'RESTART' : 'START' }}</button>
+                @click="start">{{ buttonText }}</button>
       </span>
     </span>
     <winToast :showWin="showWin"/>
@@ -25,7 +25,6 @@
 import WinToast from "@/components/winToast";
 import GridBox from "./components/GridBox.vue";
 import {initArray, action, checkFail, checkWin} from "./2048.js";
-import axios from 'axios'
 
 export default {
   name: "App",
@@ -54,25 +53,44 @@ export default {
     };
   },
   mounted() {
-    this.getScore(4);
-    const timer = setInterval(() => {
-      if (this.status === 'running' || this.status === 'won') {
-        this.setScore(this.size, this.score)
+    this.loadSession()
+  },
+  computed: {
+    buttonText() {
+      if (this.inputSize !== this.size) {
+        return "LOAD"
       }
-    }, 5000)
-    this.$once('hook:beforeDestroy', () => {
-      clearInterval(timer)
-    })
+      else if (this.status === 'running' || this.status === 'won') {
+        return "RESTART"
+      }
+      else {
+        return "START"
+      }
+    }
   },
   methods: {
-    getScore(size) {
-      axios.get(`/getScore?size=${size}`).then(res => {
-        this.highest = res.data
-      })
+    saveSession() {
+      let session = {
+        highest: this.highest,
+        score: this.score,
+        array: this.array,
+        status: this.status
+      }
+      localStorage.setItem("session" + this.size, JSON.stringify(session))
     },
-    setScore(size, score) {
-      if (this.score === this.highest) {
-        axios.post(`/setScore`, {data:{size,score}})
+    loadSession() {
+      let session = JSON.parse(localStorage.getItem("session" + this.size))
+      if (session === null) {
+        this.array = initArray(this.size)
+        this.score = 0
+        this.highest = 0
+        this.status = "running"
+      }
+      else {
+        this.score = session.score
+        this.highest = session.highest
+        this.array = session.array
+        this.status = session.status
       }
     },
     touchstart(e) {
@@ -100,20 +118,31 @@ export default {
       }
     },
     start() {
-      this.status = 'running'
-      this.score = 0
       let x = this.inputSize
-      if (x > 7) {
-        this.size = 7
-        this.inputSize = 7
-      } else if(x < 3) {
-        this.size = 3
-        this.inputSize = 3
-      } else {
-        this.size = x
+      if (x !== this.size) {
+        if (x > 7) {
+          this.size = 7
+          this.inputSize = 7
+        } else if(x < 3) {
+          this.size = 3
+          this.inputSize = 3
+        } else {
+          this.size = x
+        }
+
+        if (this.status === 'over') {
+          this.array = initArray(this.size)
+          this.score = 0
+          this.status = "running"
+        } else {
+          this.loadSession()
+        }
       }
-      this.array = initArray(this.size)
-      this.getScore(this.size)
+      else {
+        this.array = initArray(this.size)
+        this.score = 0
+        this.status = "running"
+      }
     },
     refocus() {
       this.$nextTick(() => {
@@ -125,7 +154,6 @@ export default {
       else if (e.key === "ArrowDown") this.move(2)
       else if (e.key === "ArrowLeft") this.move(3)
       else if (e.key === "ArrowRight") this.move(4)
-
     },
     move(a) {
       if (this.status === 'running' || this.status === 'won') {
@@ -149,9 +177,9 @@ export default {
         }
         if (checkFail(this.array, this.size)) {
           this.status = 'over';
-          this.setScore(this.size, this.highest)
         }
       }
+      this.saveSession();
     }
   }
 };

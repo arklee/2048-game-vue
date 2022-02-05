@@ -7,7 +7,7 @@
       <label><input type="radio" name="theme" value="taoist" v-model="showString"/>Taoist</label>
       <label><input type="radio" name="theme" value="rank" v-model="showString"/>LOL</label>
       <label><input type="radio" name="theme" value="test" v-model="showString"/>Blank</label>
-    </div>
+    </div>````
     <Toast :status="status" :score="score"/>
     <div class="container" :style="{'grid-template-columns': `repeat(${size}, ${100/size}%)`, 'grid-template-rows': `repeat(${size}, ${100/size}%)`, 'font-size': `${5.5/size}rem`}">
       <template v-for="(row, rowIndex) in array">
