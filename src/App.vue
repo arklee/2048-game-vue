@@ -81,16 +81,16 @@ export default {
     loadSession() {
       let session = JSON.parse(localStorage.getItem("session" + this.size))
       if (session === null) {
-        this.array = initArray(this.size)
+        this.array = initArray(this.size, false)
         this.score = 0
         this.highest = 0
-        this.status = "running"
+        this.status = "ready"
       }
       else {
         this.score = session.score
         this.highest = session.highest
         this.array = session.array
-        this.status = session.status
+        this.status = (session.status === "running" || session.status === "won") ? "ready" : session.status
       }
     },
     touchstart(e) {
@@ -120,6 +120,7 @@ export default {
     start() {
       let x = this.inputSize
       if (x !== this.size) {
+        //切换size
         if (x > 7) {
           this.size = 7
           this.inputSize = 7
@@ -129,19 +130,18 @@ export default {
         } else {
           this.size = x
         }
+        this.loadSession()
+      }
 
-        if (this.status === 'over') {
-          this.array = initArray(this.size)
-          this.score = 0
+      else {
+        //没有切换size
+        if (this.status === "ready") {
           this.status = "running"
         } else {
-          this.loadSession()
+          this.array = initArray(this.size, true)
+          this.score = 0
+          this.status = "running"
         }
-      }
-      else {
-        this.array = initArray(this.size)
-        this.score = 0
-        this.status = "running"
       }
     },
     refocus() {

@@ -4,11 +4,13 @@ export function cre_num() {
   else return 2;
 }
 
-export function initArray(size) {
+export function initArray(size, gen) {
   const array = Array.from(Array(size), () => Array.from(Array(size), () => 0))
   // const array = Array(size).fill(Array(size).fill(0))
-  generate(array, size)
-  generate(array, size)
+  if (gen) {
+    generate(array, size)
+    generate(array, size)
+  }
   return array
 }
 
