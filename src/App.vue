@@ -81,7 +81,7 @@ export default {
     loadSession() {
       let session = JSON.parse(localStorage.getItem("session" + this.size))
       if (session === null) {
-        this.array = initArray(this.size, false)
+        this.array = initArray(this.size)
         this.score = 0
         this.highest = 0
         this.status = "ready"
@@ -138,7 +138,7 @@ export default {
         if (this.status === "ready") {
           this.status = "running"
         } else {
-          this.array = initArray(this.size, true)
+          this.array = initArray(this.size)
           this.score = 0
           this.status = "running"
         }
